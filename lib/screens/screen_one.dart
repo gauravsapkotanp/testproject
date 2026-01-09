@@ -24,7 +24,7 @@ class _ScreenOneState extends State<ScreenOne> {
   // Speech to text
   final stt.SpeechToText _speechToText = stt.SpeechToText();
   bool _speechEnabled = false;
-  String _lastWords = '';
+  String lastWords = '';
 
   @override
   void initState() {
@@ -50,30 +50,45 @@ class _ScreenOneState extends State<ScreenOne> {
       // Start recording
       if (_speechEnabled) {
         userAnswer = _textController.text; // Save current text before recording
+        debugPrint('🎤 Starting speech recognition...');
+        debugPrint('📝 Current text before recording: "$userAnswer"');
+
         await _speechToText.listen(
           onResult: (result) {
             setState(() {
-              _lastWords = result.recognizedWords;
+              lastWords = result.recognizedWords;
+
+              // Log the recognized words
+              debugPrint('🔊 Recognized words: "${result.recognizedWords}"');
+              debugPrint('✅ Is final result: ${result.finalResult}');
+              debugPrint('💬 Confidence: ${result.confidence}');
+
               // Update text field with recognized words
               if (userAnswer.isNotEmpty) {
                 _textController.text = '$userAnswer ${result.recognizedWords}';
               } else {
                 _textController.text = result.recognizedWords;
               }
+
+              debugPrint('📄 Updated text field: "${_textController.text}"');
             });
           },
         );
         setState(() {
           isRecording = true;
         });
+      } else {
+        debugPrint('❌ Speech recognition not enabled');
       }
     } else {
       // Stop recording
+      debugPrint('⏹️ Stopping speech recognition...');
       await _speechToText.stop();
       setState(() {
         isRecording = false;
         userAnswer = _textController.text; // Update final answer
       });
+      debugPrint('📝 Final recorded text: "$userAnswer"');
     }
   }
 
