@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
 import 'package:testproject/models/question_data.dart';
+import 'package:testproject/screens/screen_two.dart';
 import 'package:testproject/widgets/slide_to_act.dart';
 
 class ScreenOne extends StatefulWidget {
@@ -104,8 +105,8 @@ class _ScreenOneState extends State<ScreenOne> {
         _pageController.jumpToPage(0);
       });
     } else {
-      // All topics completed
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('All topics completed!')));
+      // All topics completed - navigate to screen two
+      Navigator.push(context, MaterialPageRoute(builder: (context) => const ScreenTwo()));
     }
   }
 
@@ -287,21 +288,20 @@ class _ScreenOneState extends State<ScreenOne> {
                             ),
                           ),
                         if (topicIndex < topicsData.length - 1) Spacer(),
-                        if (topicIndex < topicsData.length - 1)
-                          Container(
-                            width: 60,
-                            height: 60,
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              border: Border.all(color: Colors.grey[700]!, width: 1),
-                            ),
-                            child: IconButton(
-                              onPressed: () {
-                                _goToNextTopic();
-                              },
-                              icon: Icon(Icons.arrow_forward, color: Colors.grey[400]),
-                            ),
+                        Container(
+                          width: 60,
+                          height: 60,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            border: Border.all(color: Colors.grey[700]!, width: 1),
                           ),
+                          child: IconButton(
+                            onPressed: () {
+                              _goToNextTopic();
+                            },
+                            icon: Icon(Icons.arrow_forward, color: Colors.grey[400]),
+                          ),
+                        ),
                       ],
                     ),
                   ),
